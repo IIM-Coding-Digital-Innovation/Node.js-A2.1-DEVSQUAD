@@ -11,15 +11,19 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/api/user", (req, res) => {
-    res.json({msg: "Hello world"});
+    res.json(req.body.name);
 })
 
 app.post("/api/user", (req, res) => {
-    res.json(req.body);
+    // req.body.name = req.
+
+    res.json(req.body)
+    // res.json(req.body);
 })
 
 app.delete("/api/user", (req, res) => {
-    res.json(req.body);
+    
+    res.json({nom:"",mdp:""});
 })
 
 app.post("/api/user/login", (req, res) => {
@@ -36,6 +40,6 @@ app.post("/api/user/forget", (req, res) => {
 
 
 server.listen(port, () => {
-    console.log(`On écoute sur le port ${port}`);
+    console.log(`On écoute sur le port ${port} !`);
 })
 
