@@ -1,7 +1,17 @@
 {
+  "name": "",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --watch index.js"
+  },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "http": "^0.0.1-security"
+    "socket.io": "^4.5.4"
   }
 }
+
