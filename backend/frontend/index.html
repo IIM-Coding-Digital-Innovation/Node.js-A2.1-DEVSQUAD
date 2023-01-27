@@ -7,32 +7,31 @@
     <title>CHAT</title>
 </head>
 <body>
-
-    <div id='messages'></div>
-
+    <div id="messages"></div>
     <form action="">
-
-        <input id="msg" type="text" autocomplete="off">
-        <button type="submit">Valider</button>
+        <input id="msg" autocomplete="off" /><button>Send</button>
     </form>
-    <script  src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
-            // var socket = io();
+           $(function(){
 
-            $(function (){
                 var socket = io();
 
-                $('form').submit(function(e){
-                    e.preventDefault()
+                $("form").submit(function(e) {
+                    e.preventDefault();
 
-                    socket.emit("chat message", $("#msg").val())
-                    $('msg').val("")
+                    socket.emit("chat message", $("#msg").val() );
+                    $("#msg").val("");
 
-                    return false
+                    return false;
+                });
 
-                })
-            })
+                socket.on('chat message', function (msg) {
+                    $("#messages").append($("<p>").text(msg));
+                });
+
+           });
     </script>
 </body>
 </html>
