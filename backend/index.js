@@ -4,10 +4,14 @@ const http = require("http");
 const server = http.createServer(app);
 const port = 3000;
 const cors = require("cors");
-const io = require('socket.io')(server)
+const io = require('socket.io')(server, {
+    cors:{
+        origin:"*"
+    }
+})
 
 
-
+app.use(cors());
 // CHAT TEXTULE
 app.get('/', (req, res) => {
     res.sendFile(`${__dirname}/frontend/index.html`);
@@ -34,7 +38,7 @@ server.listen(3000, () => {
 });
 
 // app.use(express.json());
-app.use(cors());
+
 
 app.get("/", (req, res) => {
     res.sendFile(`${__dirname}/frontend/index.html`)
