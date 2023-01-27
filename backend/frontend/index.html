@@ -4,34 +4,57 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>CHAT</title>
 </head>
 <body>
-    <div id="messages"></div>
-    <form action="">
-        <input id="msg" autocomplete="off" /><button>Send</button>
-    </form>
+    <header class="header-title">
+        <h1><strong>SKOOP</strong></h1>
+    <div class="chat">
+        <div class="chat-title">
+            <h1>Yanis Bekrarchouche</h1>
+            <h2>IT</h2>
+            <figure class="avatar">
+                <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg" />
+            </figure>
+        </div>
+        <div class="messages">
+            <div class="messages-content"></div>
+        </div>
+        <div class="message-box">
+            <textarea type="text" class="message-input" placeholder="Type message..." id="msg"></textarea>
+            <button type="submit" class="message-submit">Send</button>
+        </div>
+    </div>
+    <div class="bg"></div>
+</header>
+    
+    <!-- Ajout du script pour utiliser Socket.io -->
     <script src="http://localhost:3000/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
-           $(function(){
+        $(function(){
+    
+            var socket = io("http://localhost:3000/");
+    
+            $(".message-submit").click(function() {
+                var message = $("#msg").val();
+                socket.emit("chat message", message );
+                $("#msg").val("");
+            });
+    
+            socket.on('chat message', function (msg) {
+                var messageNode = $("<p>").text(msg);
+                $(".messages-content").append(messageNode);
+            });
+        });
 
-                var socket = io("http://localhost:3000/");
-
-                $("form").submit(function(e) {
-                    e.preventDefault();
-
-                    socket.emit("chat message", $("#msg").val() );
-                    $("#msg").val("");
-
-                    return false;
-                });
-
-                socket.on('chat message', function (msg) {
-                    $("#messages").append($("<p>").text(msg));
-                });
-
-           });
+        $("#msg").keypress(function(event){
+    if(event.which == 13){
+        $(".message-submit").click();
+    }
+});
     </script>
+    
 </body>
 </html>
