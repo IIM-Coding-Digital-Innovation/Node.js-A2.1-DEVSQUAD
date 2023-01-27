@@ -1,14 +1,25 @@
-const express = require("express");
-const app = express();
+
+const app = require('express')( );
 const http = require("http");
 const server = http.createServer(app);
 
 const port = 3000;
 
 const cors = require("cors");
+//socket
 
-app.use(express.json());
+const io = require('socket.io')(server)
+
+
+
+// app.use(express.json());
 app.use(cors());
+
+app.get("/", (req, res) => {
+    res.sendFile(`${__dirname}/frontend/index.html`)
+    res.json(`${__dirname}/frontend/index.html`)
+})
+
 
 app.get("/api/user", (req, res) => {
     res.json(req.body.name);
@@ -38,6 +49,10 @@ app.post("/api/user/forget", (req, res) => {
     res.json(req.body);
 })
 
+
+io.on('connection', (socket) => {
+    console.log("Un yanis s'est connecté")
+})
 
 server.listen(port, () => {
     console.log(`On écoute sur le port ${port} !`);
