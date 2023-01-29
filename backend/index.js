@@ -1,5 +1,5 @@
-
-const app = require('express')( );
+const app = require('express')();
+const mongoose = require("mongoose");
 const http = require("http");
 const server = http.createServer(app);
 const port = 3000;
@@ -8,11 +8,15 @@ const io = require('socket.io')(server, {
     cors:{
         origin:"*"
     }
-})
+});
 
+mongoose.set('strictQuery', true);
+mongoose.connect("mongodb://localhost:27017", { useNewUrlParser: true, useUnifiedTopology: true })
+.then(() => console.log("Connexion à la base de donnée établie"))
+.catch(error => console.log(error))
 
 app.use(cors());
-// CHAT TEXTULE
+
 app.get('/', (req, res) => {
     res.sendFile(`${__dirname}/frontend/index.html`);
 });
@@ -24,56 +28,40 @@ io.on('connection',(socket) =>    {
     console.log('Un utilisateur s\'est déconnecté');
 });
 
-
     socket.on('chat message', (msg) => {
         io.emit('chat message', msg);
     });
-    
 });
-
-
 
 server.listen(3000, () => {
     console.log('On écoute sur le port 3000... !');
 });
 
-// app.use(express.json());
-
-
-app.get("/", (req, res) => {
-    res.sendFile(`${__dirname}/frontend/index.html`)
-    res.json(`${__dirname}/frontend/index.html`)
-})
-
-
 app.get("/api/user", (req, res) => {
     res.json(req.body.name);
-})
+});
 
 app.post("/api/user", (req, res) => {
-    // req.body.name = req.
-
-    res.json(req.body)
-    // res.json(req.body);
-})
+    res.json(req.body);
+});
 
 app.delete("/api/user", (req, res) => {
-    
     res.json({nom:"",mdp:""});
-})
+});
 
 app.post("/api/user/login", (req, res) => {
     res.json(req.body);
-})
+});
 
 app.get("/api/user/logout", (req, res) => {
     res.json({msg: "Hello world"});
-})
+});
 
 app.post("/api/user/forget", (req, res) => {
     res.json(req.body);
-})
+});
 
-io.on("chat message", () => {
+io.on("chat message", (msg) => {
     console.log("Message: " + msg)
-})
+});
+
